@@ -1,43 +1,45 @@
 #include <ncurses.h>
+#include <time.h>
+#include "board.h"
+#include "pieces.h"
 
-#define HEIGHT 20
-#define WIDTH 10
-#define START_X 20 
-#define START_Y 1 
-
-void draw()
-{
-	for (r = 0; r < HEIGHT; r++) {
-		move(START_Y + r, START_X );
-		printw("<!");
-		for (c = 0; c < WIDTH; c++) {
-			printw(" .");
-		}
-		printw("!>");
-	}
-	move(START_Y + HEIGHT, START_X);
-	printw("<!");
-	for (c = 0; c < WIDTH; c++)
-       	{
-		printw("==");
-	}
-	printw("!>");
-	move(START_Y + HEIGHT + 1, START_X + 2);
-	for (c = 0; c < WIDTH; c++)
-       	{
-		printw("\\/");
-	}
-}
-
-int main()
+int main(int argc, char *argv[])
 {	
-	int r, c;
+	/* a grid representing the playfield */
+	int pf[FIELD_HEIGHT][FIELD_WIDTH];
 	
-	initscr();
-	curs_set(0);
-	draw();
-	refresh();
-	getch();
+	/* the piece that is currently falling */
+	struct Piece curr;	
+	
+	new_play_field(pf);
+	new_piece(&curr);
+	
+	/* ncurses stuff */
+	initscr();				/* init ncurses */
+	timeout(0);				/* stops getch() from blocking */
+	keypad(stdscr, TRUE);	/* need this so arrow keys work */
+	noecho();				/* don't print on getch() */
+	curs_set(0);			/* hide the cursor */
+	int c = 0;
+	clock_t sec;
+	while (1) {
+		sec = clock()/CLOCKS_PER_SEC;
+		move(2,2);
+		printw("%d", sec);
+		
+		c = getch();
+		switch (c) {
+			case KEY_UP 	: rotate(&curr, pf); break;
+			case KEY_LEFT 	: move_left(&curr, pf); break;
+			case KEY_RIGHT	: move_right(&curr, pf); break;
+		}
+		
+		draw_board(pf);
+		draw_piece(&curr);
+		refresh();			/* print buffer to screen */
+	}
+	/* ncurses stuff */
+	
 	endwin();
 
 	return 0;
