@@ -5,16 +5,16 @@
 /* each rotation of each piece will be represented by a 4x4 matrix,
  * this will accomodate the l piece and will save having to store
  * dimensions on each rotation */
-#define PIECE_WIDTH	4
+#define PIECE_WIDTH  4
 #define PIECE_HEIGHT 4
 
 
 struct Piece {
-	int x;
-	int y;
-	int current_rotation;
-	int number_rotations; /* num rotations for this shape */
-	int (*rotations)[PIECE_HEIGHT][PIECE_WIDTH];
+    int x;
+    int y;
+    int current_rotation;
+    int number_rotations; /* num rotations for this shape */
+    int (*rotations)[PIECE_HEIGHT][PIECE_WIDTH];
 };
 
 #define BLOCKS(x) x->rotations[x->current_rotation]
