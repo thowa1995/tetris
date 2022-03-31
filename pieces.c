@@ -1,33 +1,10 @@
 #include <ncurses.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "pieces.h"
+#include "shapes.h"
 #include "board.h"
-
-#define NUM_L_ROT  4
-int lPiece[NUM_L_ROT][PIECE_HEIGHT][PIECE_WIDTH] = {
-    
-    {{0,0,0,0},
-     {1,1,1,0},
-     {1,0,0,0},
-     {0,0,0,0}},
-     
-    {{1,1,0,0},
-     {0,1,0,0},
-     {0,1,0,0},
-     {0,0,0,0}},
-      
-    {{0,0,1,0},
-     {1,1,1,0},
-     {0,0,0,0},
-     {0,0,0,0}},
-      
-    {{0,1,0,0},
-     {0,1,0,0},
-     {0,1,1,0},
-     {0,0,0,0}} 
-
-};
 
 void draw_piece(struct Piece *p)
 {
@@ -43,11 +20,41 @@ void draw_piece(struct Piece *p)
 
 void new_piece(struct Piece *p)
 {
-    p->x = 5;
-    p->y = 5;
+    p->x = 3;
+    p->y = 0;
     p->current_rotation = 0;
-    p->number_rotations = 4;
-    p->rotations = lPiece;
+    
+    int shape = rand() % NUM_SHAPES;
+    switch (shape) { /* maybe i'll tidy this up and put them all in an array */
+        case 0 : 
+            p->number_rotations = I_NUM_ROT;
+            p->rotations = I_PIECE;
+            break;
+        case 1 :
+            p->number_rotations = J_NUM_ROT;
+            p->rotations = J_PIECE;
+            break;
+        case 2 :
+            p->number_rotations = L_NUM_ROT;
+            p->rotations = L_PIECE;
+            break;
+        case 3 :
+            p->number_rotations = T_NUM_ROT;
+            p->rotations = T_PIECE;
+            break;
+        case 4 :
+            p->number_rotations = S_NUM_ROT;
+            p->rotations = S_PIECE;
+            break;
+        case 5 :
+            p->number_rotations = Z_NUM_ROT;
+            p->rotations = Z_PIECE;
+            break;
+        default :
+            p->number_rotations = O_NUM_ROT;
+            p->rotations = O_PIECE;
+    }
+
     return;
 }
 
@@ -74,7 +81,6 @@ int valid(struct Piece *p, int (*pf)[FIELD_WIDTH])
         
         for (int c = 0; c < PIECE_WIDTH; c++) {
             if (PIECE_BLOCKS(p)[r][c] == FILLED) {
-                move(1,1);
                 if (   p->y + r < 0 || p->y + r >= FIELD_HEIGHT 
                     || p->x + c < 0 || p->x + c >= FIELD_WIDTH ) {
                     return 0;

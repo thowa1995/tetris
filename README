@@ -1,0 +1,3 @@
+This is a reimplimentation of the origianl Tetris made for the
+Electronika 60 (youtu.be/O0gAgQQHFcQ), which I made as an excercise in
+exploring the ncurses library for text based interfaces.

@@ -4,9 +4,9 @@
 /* All board measurements are in blocks,
  * each block being two chars wide 
  */
-#define FIELD_HEIGHT 20    /* the height of the playfield */
-#define FIELD_WIDTH 10    /* the width of the playfield */
-#define FIELD_X 20  /* x position of the top left block in the field */     
+#define FIELD_HEIGHT 20 /* the height of the playfield */
+#define FIELD_WIDTH 10  /* the width of the playfield */
+#define FIELD_X 20   /* x position of the top left block in the field */     
 #define FIELD_Y 1   /* y position of the top left block in the field */
 
 #define SIDE_WIDTH 2    /* thickness of the side columns in chars */

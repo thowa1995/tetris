@@ -1,7 +1,8 @@
+#include "board.h"
+
 #ifndef PIECES_H
 #define PIECES_H
 
-#include "board.h"
 /* each rotation of each piece will be represented by a 4x4 matrix,
  * this will accomodate the l piece and will save having to store
  * dimensions on each rotation */
@@ -14,7 +15,7 @@ struct Piece {
     int y;
     int current_rotation;
     int number_rotations; /* num rotations for this shape */
-    int (*rotations)[PIECE_HEIGHT][PIECE_WIDTH];
+    const int (*rotations)[PIECE_HEIGHT][PIECE_WIDTH];
 };
 
 #define PIECE_BLOCKS(x) x->rotations[x->current_rotation]

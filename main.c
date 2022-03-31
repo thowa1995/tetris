@@ -1,10 +1,11 @@
 #include <ncurses.h>
 #include <time.h>
+
 #include "board.h"
 #include "pieces.h"
 
 #define DROP_RATE 1500
-#define TIME(x) (1000*clock())/CLOCKS_PER_SEC;
+#define RUN_TIME(x) (1000*clock())/CLOCKS_PER_SEC;
 int main(int argc, char *argv[])
 {    
     /* a grid representing the playfield */
@@ -26,14 +27,14 @@ int main(int argc, char *argv[])
     noecho();               /* don't print on getch()       */
     curs_set(0);            /* hide the cursor              */
 
+    srand(time(NULL));
     new_play_field(pf);
     new_piece(&curr);
-    last = TIME();
+    last = RUN_TIME();
 
     while (1) {
-        
         /* if it's time to, then drop piece */
-        now = TIME();        
+        now = RUN_TIME();        
         if (now > last + DROP_RATE) {
             /* if we can't move down then lock the piece */
             if(!move_down(&curr, pf)) {
