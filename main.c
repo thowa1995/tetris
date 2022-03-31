@@ -3,16 +3,21 @@
 #include "board.h"
 #include "pieces.h"
 
+#define DROP_RATE 1500
+#define TIME(x) (1000*clock())/CLOCKS_PER_SEC;
 int main(int argc, char *argv[])
 {    
     /* a grid representing the playfield */
     int pf[FIELD_HEIGHT][FIELD_WIDTH];
     
     /* the piece that is currently falling */
-    struct Piece curr;    
+    struct Piece curr;
     
-    new_play_field(pf);
-    new_piece(&curr);
+    /* the last key pressed */
+    int c = 0;
+    
+    /* for comparing time to the last drop time (in milliseconds) */
+    clock_t now, last; 
     
     /* ncurses stuff */
     initscr();              /* init ncurses                 */
@@ -20,13 +25,26 @@ int main(int argc, char *argv[])
     keypad(stdscr, TRUE);   /* need this so arrow keys work */
     noecho();               /* don't print on getch()       */
     curs_set(0);            /* hide the cursor              */
-    int c = 0;
-    clock_t sec;
+
+    new_play_field(pf);
+    new_piece(&curr);
+    last = TIME();
+
     while (1) {
-        sec = clock()/CLOCKS_PER_SEC;
-        move(2,2);
-        printw("%d", sec);
         
+        /* if it's time to, then drop piece */
+        now = TIME();        
+        if (now > last + DROP_RATE) {
+            /* if we can't move down then lock the piece */
+            if(!move_down(&curr, pf)) {
+                lock_piece(&curr, pf);
+                clear_rows(pf);
+                new_piece(&curr);
+            }
+            last = now;        
+        }
+        
+        /* deal with input */
         c = getch();
         switch (c) {
             case KEY_UP     : rotate(&curr, pf);
@@ -34,6 +52,8 @@ int main(int argc, char *argv[])
             case KEY_LEFT   : move_left(&curr, pf); 
                 break;
             case KEY_RIGHT  : move_right(&curr, pf);
+                break;
+            case KEY_DOWN   : move_down(&curr, pf);
                 break;
         }
         

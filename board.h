@@ -14,7 +14,9 @@
 #define EMPTY  0    /* representing an empty block */
 #define FILLED 1    /* representing a block that has been filled */
 
-void draw_board(int (*b)[FIELD_WIDTH]);
-void new_play_field(int (*b)[FIELD_WIDTH]);
+void draw_board(int (*pf)[FIELD_WIDTH]);
+
+void new_play_field(int (*pf)[FIELD_WIDTH]);
+int clear_rows(int (*pf)[FIELD_WIDTH]);
 
 #endif
